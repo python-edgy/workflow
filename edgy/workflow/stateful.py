@@ -19,7 +19,6 @@ class StatefulObject(object):
 
 
     def __repr__(self):
-        print(self.state, self.workflow.states)
         return '<{}.{} object with {} "{}" at {}>'.format(
             type(self).__module__,
             type(self).__name__,
