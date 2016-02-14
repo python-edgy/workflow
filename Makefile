@@ -1,7 +1,7 @@
 # This file has been auto-generated.
 # All manual changes may be lost, see Projectfile.
 #
-# Date: 2016-02-13 18:20:43.900370
+# Date: 2016-02-14 09:46:04.503422
 
 PYTHON ?= $(shell which python)
 PYTHON_BASENAME ?= $(shell basename $(PYTHON))
@@ -11,9 +11,13 @@ VIRTUALENV_PATH ?= .$(PYTHON_BASENAME)-virtualenv
 WHEELHOUSE_PATH ?= .$(PYTHON_BASENAME)-wheelhouse
 PIPCACHE_PATH ?= .$(PYTHON_BASENAME)-pipcache
 PIP ?= $(VIRTUALENV_PATH)/bin/pip --cache-dir=$(PIPCACHE_PATH)
+SPHINX_OPTS ?= 
+SPHINX_BUILD ?= $(VIRTUALENV_PATH)/bin/sphinx-build
+SPHINX_SOURCEDIR ?= doc
+SPHINX_BUILDDIR ?= $(SPHINX_SOURCEDIR)/_build
 PYTEST_OPTIONS ?= --capture=no --cov=edgy/workflow --cov-report html
 
-.PHONY: clean install lint test
+.PHONY: clean doc install lint test
 
 # Installs the local project dependencies, using the environment given requirement file.
 install: $(VIRTUALENV_PATH)
@@ -30,6 +34,9 @@ $(VIRTUALENV_PATH):
 
 clean:
 	rm -rf $(VIRTUALENV_PATH) $(WHEELHOUSE_PATH) $(PIPCACHE_PATH)
+
+doc: install
+	$(SPHINX_BUILD) -b html -D latex_paper_size=a4 $(SPHINX_OPTS) $(SPHINX_SOURCEDIR) $(SPHINX_BUILDDIR)/html
 
 lint: install
 	$(VIRTUALENV_PATH)/bin/pylint --py3k edgy.workflow -f html > pylint.html
