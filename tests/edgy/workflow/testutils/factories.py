@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from edgy.workflow import Transition
-from tests.edgy.workflow.testutils.objects import Subject
+
+from .objects import Subject
 
 
 def create_transition_to_pumpkin():
