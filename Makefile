@@ -1,7 +1,7 @@
 # This file has been auto-generated.
 # All manual changes may be lost, see Projectfile.
 #
-# Date: 2016-02-15 08:12:27.247638
+# Date: 2016-02-15 08:14:34.599153
 
 PYTHON ?= $(shell which python)
 PYTHON_BASENAME ?= $(shell basename $(PYTHON))
@@ -15,7 +15,7 @@ SPHINX_BUILD ?= $(VIRTUALENV_PATH)/bin/sphinx-build
 SPHINX_SOURCEDIR ?= doc
 SPHINX_BUILDDIR ?= $(SPHINX_SOURCEDIR)/_build
 
-.PHONY: clean doc install lint test
+.PHONY: clean doc install install-dev lint test
 
 # Installs the local project dependencies.
 install: $(VIRTUALENV_PATH)
@@ -32,11 +32,16 @@ $(VIRTUALENV_PATH):
 clean:
 	rm -rf $(VIRTUALENV_PATH)
 
-lint: install
+lint: install-dev
 	$(VIRTUALENV_PATH)/bin/pylint --py3k edgy.workflow -f html > pylint.html
 
-test: install
+test: install-dev
 	$(VIRTUALENV_PATH)/bin/py.test $(PYTEST_OPTIONS) tests
+
+install-dev: $(VIRTUALENV_PATH)
+	if [ -z "$(QUICK)" ]; then \
+	    $(PIP) install -Ue "file://`pwd`#egg=edgy.workflow[dev]"; \
+	fi
 
 doc: install
 	$(SPHINX_BUILD) -b html -D latex_paper_size=a4 $(SPHINX_OPTS) $(SPHINX_SOURCEDIR) $(SPHINX_BUILDDIR)/html

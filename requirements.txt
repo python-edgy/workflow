@@ -1,5 +1,2 @@
 edgy.event >=0.1,<0.2
-pytest
 six
-sphinx
-sphinx_rtd_theme
