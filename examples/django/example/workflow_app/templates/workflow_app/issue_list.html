@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>Issues</h1>
+    <ul>
+        {% for issue in object_list %}
+            <li>
+                <a href="{% url 'issue-detail' pk=issue.pk %}">
+                    #{{ issue.pk }} —
+                    {{ issue.title }}
+                </a>
+            </li>
+        {% empty %}
+            <li>No issues.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'issue-create' %}">New issue</a>
+{% endblock %}

@@ -60,6 +60,8 @@ class Workflow(object):
                 self._transitions_by_source[source_state] = {}
             self._transitions_by_source[source_state][transition.__name__] = transition
 
+        return transition
+
     def get_available_transitions_for(self, subject):
         transitions = self._transitions_by_source.get(subject.state, {})
         transitions.update(self._transitions_by_source.get(WILDCARD, {}))

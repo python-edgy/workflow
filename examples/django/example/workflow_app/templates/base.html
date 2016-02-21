@@ -1,0 +1,44 @@
+<html>
+<head>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css">
+    <style>
+        h1 {
+            font-size: 24px;
+        }
+        h2 {
+            font-size: 18px;
+        }
+        .issue {
+            background: #FFFFEC;
+            padding: 1em;
+            border: 1px solid #d7d7d7;
+        }
+        form {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-light bg-faded">
+        <a class="navbar-brand" href="{% url 'issue-list' %}">Issues</a>
+        <ul class="nav navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'issue-list' %}">List <span class="sr-only">(current)
+                </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'issue-create' %}">New</a>
+            </li>
+        </ul>
+    </nav>
+
+    <br>
+
+    {% block body %}
+    {% endblock %}
+</div>
+</body>
+</html>

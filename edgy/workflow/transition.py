@@ -83,6 +83,9 @@ class Transition(object):
     def __name__(self):
         return self._name or self.handler.__name__
 
+    # Alias that can be used in django templates, for example.
+    name = __name__
+
     def __repr__(self):
         return '<{}.{} object "{}" ({} to {}) at {}>'.format(
             type(self).__module__,
@@ -93,7 +96,7 @@ class Transition(object):
             hex(id(self)),
         )
 
-    def handler(self, subject, *args, **kwargs):
+    def handler(self, subject, *args, **kwargs):  # pragma: no cover
         """
         Default handler do not apply any side effect. Either implement it in a subclass or pass a
         callable to the constructor to define your transition behavior.

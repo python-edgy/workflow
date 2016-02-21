@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="issue">
+        <h1>Issue #{{ object.pk }} — {{ object.title }}</h1>
+
+        {{ issue.description | linebreaks }}
+
+        <ul>
+            <li>Author: {{ issue.author }}</li>
+            <li>Assignee: {{ issue.assignee }}</li>
+            <li>Status: <span class="label label-default">{{ issue.state }}</span></li>
+        </ul>
+
+        <h2>Workflow</h2>
+
+        <ul>
+            {% for transition_name, transition in issue.available_transitions.items %}
+                <li>
+                    <a href="{% url 'issue-transition' pk=issue.pk transition=transition_name %}">
+                        {{ transition_name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

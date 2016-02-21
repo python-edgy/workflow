@@ -34,6 +34,10 @@ class StatefulObject(object):
     initial_state = None
     current_state = None
 
+    @property
+    def available_transitions(self):
+        return self.workflow.get_available_transitions_for(self)
+
     def __new__(cls, *args, **kwargs):
         if not cls.workflow:
             raise RuntimeError('It is not possible to instanciate a StatefulObject without a workflow.')

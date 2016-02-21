@@ -1,6 +1,7 @@
 *.egg-info
 *.pyc
 *.swp
+.idea
 /.cache
 /.coverage
 /.idea
@@ -8,5 +9,6 @@
 /build
 /dist
 /doc/_build/
+/examples/django/db.sqlite3
 /htmlcov
 /pylint.html
