@@ -5,6 +5,8 @@ callable with additional metadata to make the system aware of when it can be app
 
 """
 
+from __future__ import absolute_import, print_function, unicode_literals
+
 import functools
 
 from edgy.workflow.constants import WILDCARD
@@ -71,7 +73,7 @@ class Transition(object):
                 'This transition cannot be executed on a subject in "{}" state, authorized source '
                 'states are {}.'.format(subject.state,
                                         ', '.join(['"{}"'.format(state) for state in self.source]))
-                )
+            )
         try:
             retval = self.handler(self, subject, *args, **kwargs)
             subject.state = self.target

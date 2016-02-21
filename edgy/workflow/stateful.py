@@ -8,6 +8,8 @@ However, as an helper class to demonstrate how a workflow can be bound to an obj
 
 """
 
+from __future__ import absolute_import, print_function, unicode_literals
+
 import functools
 
 
@@ -40,13 +42,13 @@ class StatefulObject(object):
 
     def __new__(cls, *args, **kwargs):
         if not cls.workflow:
-            raise RuntimeError('It is not possible to instanciate a StatefulObject without a workflow.')
+            raise RuntimeError(
+                'It is not possible to instanciate a StatefulObject without a workflow.')
         state = kwargs.pop('state', None)
         instance = super(StatefulObject, cls).__new__(cls)
         if state:
             instance.current_state = state
         return instance
-
 
     def __repr__(self):
         return '<{}.{} object with {} "{}" at {}>'.format(
