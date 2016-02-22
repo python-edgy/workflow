@@ -5,26 +5,19 @@ from __future__ import unicode_literals, print_function
 from edgy.workflow import Workflow, Transition, StatefulObject
 
 
-workflow = Workflow()
+class MyWorkflow(Workflow):
+    @Transition(source='new', target='accepted')
+    def accept(self, subject):
+        print('accepting {} using {}...'.format(subject, self))
 
-
-@Transition(source='new', target='accepted')
-def accept(self, subject):
-    print('accepting {} using {}...'.format(subject, self))
-
-
-@Transition(source='new', target='refused')
-def refuse(self, subject):
-    print('refusing {} using {}...'.format(subject, self))
-
-
-workflow.add_transition(accept)
-workflow.add_transition(refuse)
+    @Transition(source='new', target='refused')
+    def refuse(self, subject):
+        print('refusing {} using {}...'.format(subject, self))
 
 
 class Issue(StatefulObject):
     initial_state = 'new'
-    workflow = workflow
+    workflow = MyWorkflow()
 
 
 print('>>> iss42 = Issue()')

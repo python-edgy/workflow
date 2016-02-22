@@ -6,43 +6,33 @@ from edgy.workflow import StatefulObject, Workflow, Transition
 
 
 class IssueWorkflow(Workflow):
-    def __init__(self):
-        super().__init__()
+    @Transition(source='new', target='ready')
+    def accept(self, subject):
+        pass
 
-        @self.add_transition
-        @Transition(source='new', target='ready')
-        def accept(self, subject):
-            pass
+    @Transition(source='new', target='refused')
+    def refuse(self, subject):
+        pass
 
-        @self.add_transition
-        @Transition(source='new', target='refused')
-        def refuse(self, subject):
-            pass
+    @Transition(source='ready', target='in_progress')
+    def start(self, subject):
+        pass
 
-        @self.add_transition
-        @Transition(source='ready', target='in_progress')
-        def start(self, subject):
-            pass
+    @Transition(source='in_progress', target='done')
+    def complete(self, subject):
+        pass
 
-        @self.add_transition
-        @Transition(source='in_progress', target='done')
-        def complete(self, subject):
-            pass
+    @Transition(source='done', target='closed')
+    def close(self, subject):
+        pass
 
-        @self.add_transition
-        @Transition(source='done', target='closed')
-        def close(self, subject):
-            pass
+    @Transition(source='*', target='invalid')
+    def invalidate(self, subject):
+        pass
 
-        @self.add_transition
-        @Transition(source='*', target='invalid')
-        def invalidate(self, subject):
-            pass
-
-        @self.add_transition
-        @Transition(source='*', target='new')
-        def reset(self, subject):
-            pass
+    @Transition(source='*', target='new')
+    def reset(self, subject):
+        pass
 
 
 class Issue(StatefulObject, models.Model):

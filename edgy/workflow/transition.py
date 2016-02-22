@@ -5,8 +5,6 @@ callable with additional metadata to make the system aware of when it can be app
 
 """
 
-import functools
-
 from edgy.workflow.constants import WILDCARD
 from edgy.workflow.utils import issequence
 
@@ -44,28 +42,35 @@ class Transition(object):
 
     """
 
-    def __new__(cls, handler=None, **kwargs):
-        # If we have a complete construction call, let's use default "object" instance creator.
-        if handler:
-            return super(Transition, cls).__new__(cls)
+    # Tracks each time a Transition instance is created. Used to retain order.
+    creation_counter = 0
 
-        # If we're missing a handler, then we return a decorator that will instanciate the
-        # transition once a handler has been given.
-        @functools.wraps(Transition)
-        def decorator(handler):
-            return Transition(handler=handler, **kwargs)
-
-        return decorator
+    # Transition handler. If absent, the transition is considered as "partial", and should be called with a handler
+    # callable to be complete.
+    handler = None
 
     def __init__(self, handler=None, name=None, source=None, target=None):
         self.source = tuple(source if issequence(source) else (source,))
         self.target = target
         self._name = name
 
+        # Increase the creation counter, and save our local copy.
+        self.creation_counter = Transition.creation_counter
+        Transition.creation_counter += 1
+
         if handler:
             self.handler = handler or self.handler
 
-    def __call__(self, subject, *args, **kwargs):
+    def __call__(self, *args, **kwargs):
+        if self.handler:
+            return self.__call_complete(*args, **kwargs)
+        return self.__call_partial(*args, **kwargs)
+
+    def __call_partial(self, handler):
+        self.handler = handler
+        return self
+
+    def __call_complete(self, subject, *args, **kwargs):
         if not WILDCARD in self.source and not subject.state in self.source:
             raise RuntimeError(
                 'This transition cannot be executed on a subject in "{}" state, authorized source '
@@ -81,7 +86,11 @@ class Transition(object):
 
     @property
     def __name__(self):
-        return self._name or self.handler.__name__
+        if self._name:
+            return self._name
+        if self.handler:
+            return self.handler.__name__
+        return 'partial'
 
     # Alias that can be used in django templates, for example.
     name = __name__
@@ -96,14 +105,3 @@ class Transition(object):
             hex(id(self)),
         )
 
-    def handler(self, subject, *args, **kwargs):  # pragma: no cover
-        """
-        Default handler do not apply any side effect. Either implement it in a subclass or pass a
-        callable to the constructor to define your transition behavior.
-
-        :param subject:
-        :param args:
-        :param kwargs:
-
-        """
-        pass

@@ -4,6 +4,8 @@ from django.views.generic.edit import BaseUpdateView
 
 
 class TransitionView(SingleObjectTemplateResponseMixin, BaseUpdateView):
+    template_name_suffix = '_transition'
+
     def get_form_kwargs(self):
         form_kwargs = super(TransitionView, self).get_form_kwargs()
         form_kwargs['transition'] = self.transition
