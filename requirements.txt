@@ -1,2 +1,2 @@
 edgy.event >=0.1,<0.2
-six
+six==1.10.0
